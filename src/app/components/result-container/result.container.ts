@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
 import { QuizQuestion } from "src/app/models";
 import { LocalStorageService } from "src/app/services/local-storage.service";
 
@@ -14,8 +15,14 @@ import { LocalStorageService } from "src/app/services/local-storage.service";
     <div class="mt-3" id="quiz-score" [ngClass]="setBackgroundColor(score)">
       {{ scoreText }}
     </div>
+    <button class="btn btn-primary new-quiz-btn mt-5" (click)="onNavigateToNewQuiz()">Create new Quiz</button>
   `,
   styles: [`
+    .new-quiz-btn{
+      width: 50%;
+      margin-left: 25%;
+
+    }
     #results-heading{
       text-align: center;
     }
@@ -40,7 +47,7 @@ export class ResultContainer implements OnInit{
   public quizResult: QuizQuestion[];
   public scoreText: string;
   public score: number;
-  constructor(private readonly localStorageService: LocalStorageService,){}
+  constructor(private readonly localStorageService: LocalStorageService, private readonly router: Router){}
 
   public ngOnInit(): void {
       this.quizResult = this.localStorageService.getItem('result');
@@ -70,5 +77,10 @@ export class ResultContainer implements OnInit{
     } else {
       return 'success-result';
     }
+  }
+
+  public onNavigateToNewQuiz(): void{
+    this.localStorageService.clear();
+    this.router.navigate(['/quiz']);
   }
 }
