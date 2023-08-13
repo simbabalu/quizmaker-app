@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
-import { QuizQuestion } from "src/app/models";
-import { LocalStorageService } from "src/app/services/local-storage.service";
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { QuizQuestion } from '../../models';
+import { LocalStorageService } from '../../services/local-storage.service';
 
 @Component({
   selector: 'app-result-container',
@@ -17,7 +17,8 @@ import { LocalStorageService } from "src/app/services/local-storage.service";
     </div>
     <button class="btn btn-primary new-quiz-btn mt-5" (click)="onNavigateToNewQuiz()">Create new Quiz</button>
   `,
-  styles: [`
+  styles: [
+    `
     .new-quiz-btn{
       width: 50%;
       margin-left: 25%;
@@ -40,36 +41,40 @@ import { LocalStorageService } from "src/app/services/local-storage.service";
     .success-result{
       background-color: green;
     }
-  `],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  `,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ResultContainer implements OnInit{
+export class ResultContainer implements OnInit {
   public quizResult: QuizQuestion[];
   public scoreText: string;
   public score: number;
-  constructor(private readonly localStorageService: LocalStorageService, private readonly router: Router){}
+  constructor(
+    private readonly localStorageService: LocalStorageService,
+    private readonly router: Router
+  ) {}
 
   public ngOnInit(): void {
-      this.quizResult = this.localStorageService.getItem('result');
-      this.scoreText = this.getScoreText();
+    this.quizResult = this.localStorageService.getItem('result');
+    this.scoreText = this.getScoreText();
   }
 
-  public getScoreText(): string{
+  public getScoreText(): string {
     const score = this.calculateScore();
     let scoreText = `You scored ${this.score} out of 5`;
     return scoreText;
   }
 
-  private calculateScore(): void{
+  private calculateScore(): void {
     this.score = 0;
-    this.quizResult.forEach(question => {
-      if(question.selectedAnswer === question.correctAnswer){
+    this.quizResult.forEach((question) => {
+      if (question.selectedAnswer === question.correctAnswer) {
         this.score++;
       }
     });
   }
 
-  public setBackgroundColor(score: number): string{
+  public setBackgroundColor(score: number): string {
     if (score <= 1) {
       return 'low-result';
     } else if (score === 2 || score === 3) {
@@ -79,7 +84,7 @@ export class ResultContainer implements OnInit{
     }
   }
 
-  public onNavigateToNewQuiz(): void{
+  public onNavigateToNewQuiz(): void {
     this.localStorageService.clear();
     this.router.navigate(['/quiz']);
   }

@@ -1,6 +1,11 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from "@angular/core";
-import { QuizQuestion } from "src/app/models";
-import { QuizBusinessService } from "src/app/services";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
+import { QuizQuestion } from '../../models';
+import { QuizBusinessService } from '../../services';
 
 @Component({
   selector: 'app-quiz-result-question',
@@ -33,7 +38,8 @@ import { QuizBusinessService } from "src/app/services";
       </div>
     </div>
   `,
-  styles: [`
+  styles: [
+    `
     .wrongAnswer{
       background-color: red;
     }
@@ -47,12 +53,12 @@ import { QuizBusinessService } from "src/app/services";
     .question{
       text-align: center;
     }
-  `],
+  `,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-
 })
-export class QuizResultQuestionComponent{
+export class QuizResultQuestionComponent {
   @Input() public question: QuizQuestion;
 
-  constructor(public readonly businessService: QuizBusinessService){}
+  constructor(public readonly businessService: QuizBusinessService) {}
 }

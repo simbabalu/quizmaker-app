@@ -1,6 +1,12 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
-import { QuizQuestion } from "src/app/models";
-import { QuizBusinessService } from "src/app/services";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+} from '@angular/core';
+import { QuizQuestion } from '../../models';
+import { QuizBusinessService } from '../../services';
 
 @Component({
   selector: 'app-quiz-question',
@@ -17,7 +23,8 @@ import { QuizBusinessService } from "src/app/services";
       </div>
     </div>
   `,
-  styles: [`
+  styles: [
+    `
     .question{
       text-align: center;
     }
@@ -25,17 +32,18 @@ import { QuizBusinessService } from "src/app/services";
       background-color: green; /* Change this to the desired color */
       color: white;
     }
-  `],
+  `,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-
 })
-export class QuizQuestionComponent{
+export class QuizQuestionComponent {
   @Input() public question: QuizQuestion;
-  @Output() public readonly answerBtnActivated = new EventEmitter<QuizQuestion>();
+  @Output() public readonly answerBtnActivated =
+    new EventEmitter<QuizQuestion>();
 
-  constructor(public readonly businessService: QuizBusinessService){}
+  constructor(public readonly businessService: QuizBusinessService) {}
 
-  public clickAnswerActivated(answer: string, question: QuizQuestion): void{
+  public clickAnswerActivated(answer: string, question: QuizQuestion): void {
     question.selectedAnswer = answer;
     this.answerBtnActivated.emit(question);
   }

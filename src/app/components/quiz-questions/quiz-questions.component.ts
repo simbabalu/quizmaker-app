@@ -1,7 +1,14 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { QuizQuestion } from "src/app/models";
-import { QuizQuestionDto } from "src/app/models/quiz-question-dto.model";
-import { QuizBusinessService } from "src/app/services";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
+import { QuizQuestion } from '../../models';
+import { QuizQuestionDto } from '../../models';
+import { QuizBusinessService } from '../../services';
 
 @Component({
   selector: 'app-quiz-questions',
@@ -13,7 +20,8 @@ import { QuizBusinessService } from "src/app/services";
       <button type="submit" id="submitBtn" class="btn btn-primary mt-2" (click)="submitClicked()">submit</button>
     </div>
   `,
-  styles: [`
+  styles: [
+    `
     #submitBtn{
       width: 50%;
       margin-left: 25%;
@@ -25,44 +33,47 @@ import { QuizBusinessService } from "src/app/services";
       background-color: green; /* Change this to the desired color */
       color: white;
     }
-  `],
+  `,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-
 })
-export class QuizQuestionsComponent implements OnInit{
+export class QuizQuestionsComponent implements OnInit {
   @Input() public questionDtos: QuizQuestionDto[];
-  @Output() public readonly submitActivated = new EventEmitter<QuizQuestion[]>();
+  @Output() public readonly submitActivated = new EventEmitter<
+    QuizQuestion[]
+  >();
   public quizQuestions: QuizQuestion[] = [];
   public submitVisible: boolean = false;
 
-  constructor(private readonly businessService: QuizBusinessService){
-  }
+  constructor(private readonly businessService: QuizBusinessService) {}
 
   public ngOnInit(): void {
     this.initQuiz();
   }
 
-  public onClickAnswer(question: QuizQuestion): void{
-    const unAnsweredQuestion = this.quizQuestions.find(q => q.selectedAnswer == null);
-    if(!unAnsweredQuestion){
+  public onClickAnswer(question: QuizQuestion): void {
+    const unAnsweredQuestion = this.quizQuestions.find(
+      (q) => q.selectedAnswer == null
+    );
+    if (!unAnsweredQuestion) {
       this.submitVisible = true;
     }
   }
 
-  public submitClicked(): void{
+  public submitClicked(): void {
     this.submitActivated.emit(this.quizQuestions);
   }
 
-  public initQuiz(): void{
-    this.questionDtos.forEach(question => {
+  public initQuiz(): void {
+    this.questionDtos.forEach((question) => {
       const answers: string[] = question.incorrect_answers;
       answers.push(question.correct_answer);
-      const quizQuestion: QuizQuestion ={
+      const quizQuestion: QuizQuestion = {
         question: question.question,
         correctAnswer: question.correct_answer,
         incorrectAnswers: question.incorrect_answers,
         mixedAnswers: [],
-        selectedAnswer: null
+        selectedAnswer: null,
       };
       quizQuestion.mixedAnswers = this.businessService.mixArray(answers);
       this.quizQuestions.push(quizQuestion);

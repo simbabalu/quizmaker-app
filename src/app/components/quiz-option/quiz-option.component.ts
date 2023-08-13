@@ -1,7 +1,13 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { QuizOptions, TriviaCategory } from 'src/app/models';
-import { QuizOptionFormService } from 'src/app/services';
-import { DifficultyLevel } from 'src/app/types/difficulty-level.type';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+} from '@angular/core';
+import { QuizOptions, TriviaCategory } from '../../models';
+import { QuizOptionFormService } from '../../services';
+import { DifficultyLevel } from '../../types/difficulty-level.type';
 
 @Component({
   selector: 'app-quiz-options',
@@ -26,7 +32,8 @@ import { DifficultyLevel } from 'src/app/types/difficulty-level.type';
     </form>
     </section>
   `,
-  styles: [`
+  styles: [
+    `
       #quiz-options-section{
         background-color: #dfdfdf;
         padding: 12px;
@@ -34,25 +41,31 @@ import { DifficultyLevel } from 'src/app/types/difficulty-level.type';
       .h1{
         text-align:center;
       }
-  `],
+  `,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers:[QuizOptionFormService]
+  providers: [QuizOptionFormService],
 })
-export class QuizOptionComponent{
+export class QuizOptionComponent {
   @Input() public categories: TriviaCategory;
-  @Output() public readonly createQuizActivated = new EventEmitter<QuizOptions>();
+  @Output() public readonly createQuizActivated =
+    new EventEmitter<QuizOptions>();
   public selectedValueCategory: string = '';
   public selectedValueDifficulty: string = '';
-  public readonly difficultyLevels: DifficultyLevel[] = ['easy', 'medium', 'hard'];
-  constructor(public quizOptionFormService: QuizOptionFormService){}
+  public readonly difficultyLevels: DifficultyLevel[] = [
+    'easy',
+    'medium',
+    'hard',
+  ];
+  constructor(public quizOptionFormService: QuizOptionFormService) {}
 
-  public onCreateQuiz(): void{
+  public onCreateQuiz(): void {
     const categoryId = this.quizOptionFormService.category.value;
     const difficulty = this.quizOptionFormService.difficulty.value;
     const quizOptions: QuizOptions = {
       categoryId,
-      difficulty
-    }
+      difficulty,
+    };
     const quiz = this.createQuizActivated.emit(quizOptions);
   }
 }

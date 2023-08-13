@@ -1,9 +1,19 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
-import { QuizDto, QuizOptions, QuizQuestion, TriviaCategory } from 'src/app/models';
-import { QuizApiService } from 'src/app/services';
-import { LocalStorageService } from 'src/app/services/local-storage.service';
+import {
+  QuizDto,
+  QuizOptions,
+  QuizQuestion,
+  TriviaCategory,
+} from '../../models';
+import { QuizApiService } from '../../services';
+import { LocalStorageService } from '../../services/local-storage.service';
 
 @Component({
   selector: 'app-quiz-container',
@@ -16,24 +26,28 @@ import { LocalStorageService } from 'src/app/services/local-storage.service';
     </ng-container>
   `,
   styles: [``],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class QuizContainer implements OnInit, OnDestroy {
   public categories$: Observable<TriviaCategory>;
   public quiz$: Observable<QuizDto>;
   private readonly destroy$ = new Subject<void>();
 
-  constructor(public readonly quizApiService: QuizApiService,
+  constructor(
+    public readonly quizApiService: QuizApiService,
     private readonly localStorageService: LocalStorageService,
-    private readonly router: Router){}
-
+    private readonly router: Router
+  ) {}
 
   public ngOnInit(): void {
     this.categories$ = this.quizApiService.getCategories();
   }
 
-  public onCreateQuiz(quizOptions: QuizOptions): void{
-    this.quiz$ = this.quizApiService.getQuiz(quizOptions.categoryId, quizOptions.difficulty);
+  public onCreateQuiz(quizOptions: QuizOptions): void {
+    this.quiz$ = this.quizApiService.getQuiz(
+      quizOptions.categoryId,
+      quizOptions.difficulty
+    );
   }
 
   public ngOnDestroy(): void {
@@ -41,9 +55,8 @@ export class QuizContainer implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  public onSubmit(quizQuestions: QuizQuestion[]): void{
+  public onSubmit(quizQuestions: QuizQuestion[]): void {
     this.localStorageService.setItem('result', quizQuestions);
     this.router.navigate(['/result']);
   }
-
 }
